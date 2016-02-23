@@ -26,7 +26,7 @@ public class A3Driver
 						case "insert" : break;
 						case "search" : break;
 						case "delete" : deleteItem(input, shoppingCart); break;
-						case "update" : break;
+						case "update" : updateItem(input, shoppingCart); break;
 						case "print" : System.out.println("Hello");break;
 						default: throw new InvalidCategoryException("Invalid Category");
 						}
@@ -83,11 +83,11 @@ public class A3Driver
 			 i++; 
 		  }
 		  
-		  System.out.println("Name: " + input[1] + " Quantity Deleted: " + count);
+		  System.out.println("Name: " + input[1] + "  Quantity Deleted: " + count);
 		  
 	  }
 	  
-	  void updateItem(String[] input, ArrayList<Item> sc)
+	  static void updateItem(String[] input, ArrayList<Item> sc)
 	  {
 		  if(input.length != 3){
 			  System.out.println("INVALID INPUT");
@@ -122,7 +122,7 @@ public class A3Driver
 		  
 		  sc.get(i).setQuantity(quantity);
 		  
-		  System.out.print("Name: " + input[1] + " Updated Quantity: " + input[2]);
+		  System.out.print("Name: " + input[1] + "  Updated Quantity: " + input[2]);
 		  
 		  
 			 
