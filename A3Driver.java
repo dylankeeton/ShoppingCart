@@ -20,6 +20,7 @@ public class A3Driver
 			  {
 				  try{
 					  String[] input = s.split(" ");
+					  input[0] = input[0].toLowerCase();
 					  switch(input[0])
 					  {
 					  	case "insert" : insertItem(input, shoppingCart); break;
@@ -92,6 +93,16 @@ public class A3Driver
 			  			 "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV",
 			  			 "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN",
 			  			 "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"};
+			  int index = 0;
+			  for(int i = 0; i < sc.size(); i++)
+			  {
+				  if(input[2].compareTo(sc.get(i).getName()) < 0)
+				  {
+					  index = i;
+					  break;
+				  }
+				  index = sc.size();
+			  }
 			  if(Double.valueOf(input[3]) < 0 || Integer.valueOf(input[4]) < 0 || Integer.valueOf(input[5]) < 0)
 				  throw new InvalidCategoryException("Invalid Category");
 			  switch(input[1])
@@ -99,7 +110,7 @@ public class A3Driver
 				case "clothing": 
 				{
 					if(input.length == 6)
-						sc.add(new Clothing(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]))); 
+						sc.add(index, new Clothing(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]))); 
 					else
 						throw new InvalidCategoryException("Invalid Category");
 					break;
@@ -109,39 +120,48 @@ public class A3Driver
 					if(Arrays.asList(states).contains(input[7]))
 					{
 						if(input[6].equals("F") && input.length == 8)
-							sc.add(new Electronics(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]),true,input[7]));
+							sc.add(index, new Electronics(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]),true,input[7]));
 						else if(input[6].equals("NF") && input.length == 8)
-							sc.add(new Electronics(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]),false,input[7]));
+							sc.add(index, new Electronics(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]),false,input[7]));
 						else
 							throw new InvalidCategoryException("Invalid Category");
 					}
 					else
 						throw new InvalidCategoryException("Invalid Category");
+					break;
 				}
 				case "groceries":
 				{
 					if(input[6].equals("P") && input.length == 7)
-						sc.add(new Grocery(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]),true));
+						sc.add(index, new Grocery(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]),true));
 					else if(input[6].equals("NP") && input.length == 7)
-						sc.add(new Grocery(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]),false));					
+						sc.add(index, new Grocery(input[2],Double.valueOf(input[3]),Integer.valueOf(input[4]),Integer.valueOf(input[5]),false));					
 					else
+					{
 						throw new InvalidCategoryException("Invalid Category");
+					}
+					break;	
 				}
 				default: throw new InvalidCategoryException("Invalid Category");
 			}
+			
 		 }
 		 catch(InvalidCategoryException a)
 		 {	
 			System.err.println("INVALID INPUT, COMMAND ABORTED");
+			return;
 		 }
 		 catch(ArrayIndexOutOfBoundsException a)
 		 {
 			System.err.println("INVALID INPUT, COMMAND ABORTED");
+			return;
 		 }
 		 catch(NumberFormatException a)
 		 {
 		  	System.err.println("INVALID INPUT, COMMAND ABORTED");
+		  	return;
 		 }
+		 
 		 
 	 }
 	  
@@ -164,6 +184,7 @@ public class A3Driver
 		 catch(InvalidCategoryException a)
 		 {	
 			System.err.println("INVALID INPUT, COMMAND ABORTED");
+			return;
 		 }
 		 
 	 }
@@ -192,6 +213,7 @@ public class A3Driver
 		  catch(InvalidCategoryException a)
 		  {	
 			System.err.println("INVALID INPUT, COMMAND ABORTED");
+			return;
 		  }
 		  
 	  }
@@ -212,6 +234,7 @@ public class A3Driver
 		  catch(InvalidCategoryException a)
 		  {	
 			System.err.println("INVALID INPUT, COMMAND ABORTED");
+			return;
 		  }
 		  
 		  
@@ -224,14 +247,21 @@ public class A3Driver
 				  nameFound = true;
 				  break;
 			  }
+			  i++;
 		  }	  
-		  if(nameFound == false)
-		  {
-			  System.out.println("name not found.  invalid command");
-			  return;
-		  }	  
+		  try{
+			  if(nameFound == false)
+			  {
+				  throw new InvalidCategoryException("Name not Found.");
+			  }	 
+		  }
+		  catch(InvalidCategoryException a)
+		  {	
+			System.err.println("INVALID INPUT, COMMAND ABORTED");
+			return;
+		  }
 		  sc.get(i).setQuantity(quantity);	  
-		  System.out.print("Name: " + input[1] + "  Updated Quantity: " + input[2]);	 
+		  System.out.print("Name: " + input[1] + "  Updated Quantity: " + input[2] + "\n");	 
 	  }
 	  
 }
